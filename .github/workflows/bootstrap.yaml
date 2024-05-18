@@ -60,6 +60,8 @@ jobs:
               exit 1
               ;;
           esac
+      - name: PWD
+        run: pwd && ls
       - name: Terraform Output
         if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' }}
         run: terraform output
