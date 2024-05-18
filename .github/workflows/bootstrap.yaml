@@ -40,6 +40,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       - name: Execute Terraform Command
         run: |
+          cd bootstrap-iac
           terraform init
           case "${{ github.event.inputs.terraform_options }}" in
             validate)
