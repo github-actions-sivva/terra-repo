@@ -2,15 +2,21 @@ name: Bootstrap Infrastructure
 on: 
   workflow_dispatch:
     inputs:
-      environment:
+      app_name:
         type: choice
         options:
-          - 'non-prod'
-          - 'prod'
+          - app1
+          - app2
+      # environment:
+      #   type: choice
+      #   options:
+      #     - 'non-prod'
+      #     - 'prod'
         description: 'Target Environment'
       terraform_options:
         type: choice
         options:
+          - n/a
           - validate
           - plan
           - apply
@@ -32,26 +38,43 @@ jobs:
           credentials_json: "${{ secrets.GCP_TF_SVC_ACCOUNT }}"
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: Terraform init
-        run: terraform init 
-      - name: List of files 
+      - name: Execute Terraform Command
+        run: |
+          terraform init
+          case "${{ github.event.inputs.terraform_options }}" in
+            validate)
+              terraform validate
+              ;;
+            plan)
+              terraform plan
+              ;;
+            apply)
+              terraform apply -auto-approve
+              ;;
+            destroy)
+              terraform destroy -auto-approve
+              ;;
+            *)
+              echo "Invalid terraform option selected."
+              exit 1
+              ;;
+          esac
+      - name: List of files
         run: ls -la
-      - name: Terraform Plan
-        run: terraform plan
-
-  # list-instances:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Set up Google Cloud SDK
-  #       uses: google-github-actions/setup-gcloud@v0.4.0
-  #       with:
-  #         service_account_key: ${{ secrets.GCP_TF_SVC_ACCOUNT }}
-  #         project_id: ${{ vars.PROJECT_ID}}
-  #     - name: List instances
-  #       run: gcloud compute instances list
-  #     - name: Auth list
-  #       run: gcloud auth list
-    
+      # - name: Terraform ${{ github.event.inputs.terraform_options }} for ${{ github.event.inputs.environment }}
+      #   if: ${{ github.event.inputs.terraform_options == 'init' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'destroy' }}
+      #   run: terraform init 
+      # - name: Terraform ${{ github.event.inputs.terraform_options }} for ${{ github.event.inputs.environment }}
+      #   if: ${{ github.event.inputs.terraform_options == 'validate' }}
+      #   run: terraform validate
+      # - name: Terraform Plan
+      #   if: ${{ github.event.inputs.terraform_options == 'plan' }}
+      #   run: terraform plan
+      # - name: Terraform Apply
+      #   if: ${{ github.event.inputs.terraform_options == 'apply' }}
+      #   run: terraform apply -auto-approve
+      # - name: Terraform Destroy
+      #   if: ${{ github.event.inputs.terraform_options == 'destroy' }}
+      #   run: terraform destroy -auto-approve
+      # - name: List of files
+      #   run: ls -la
