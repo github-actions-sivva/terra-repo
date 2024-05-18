@@ -59,8 +59,9 @@ jobs:
               exit 1
               ;;
           esac
-      - name: List of files
-        run: ls -la
+      - name: Terraform Output
+        if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' }}
+        run: terraform output
       # - name: Terraform ${{ github.event.inputs.terraform_options }} for ${{ github.event.inputs.environment }}
       #   if: ${{ github.event.inputs.terraform_options == 'init' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'destroy' }}
       #   run: terraform init 
