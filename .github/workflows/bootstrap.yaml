@@ -21,6 +21,7 @@ on:
           - plan
           - apply
           - destroy
+          - outputs
 jobs:
   terraform:
     name: Terraform Deployment
@@ -60,11 +61,11 @@ jobs:
               exit 1
               ;;
           esac
-      - name: PWD
-        run: pwd && ls
       - name: Terraform Output
-        if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' }}
-        run: terraform output
+        if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'outputs' }}
+        run: |
+          cd bootstrap-iac
+          terraform output
       # - name: Terraform ${{ github.event.inputs.terraform_options }} for ${{ github.event.inputs.environment }}
       #   if: ${{ github.event.inputs.terraform_options == 'init' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'destroy' }}
       #   run: terraform init 
