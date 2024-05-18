@@ -12,7 +12,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0.4.0
         with:
           service_account_key: ${{ secrets.GCP_TF_SVC_ACCOUNT }}
-          project_id: 
+          project_id: ${{ vars.PROJECT_ID}}
       - name: List instances
         run: gcloud compute instances list
       - name: Auth list
