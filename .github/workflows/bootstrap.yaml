@@ -47,6 +47,7 @@ jobs:
           echo "Listing files"
           ls
           #project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
+          echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
           echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
       - name: Set color
         id: color-selector
@@ -57,7 +58,7 @@ jobs:
         run: echo "The selected color is $SELECTED_COLOR"
       - name: Print Project_ID
         env: 
-          PROJECT_ID: ${{ steps.read_project_config.PROJECT_ID}}
+          PROJECT_ID: ${{ steps.read_project_config.SELECTED_COLOR}}
         run: |
           echo "The Project id is: $PROJECT_ID"
       - name: Authenticate to Google Cloud SDK
