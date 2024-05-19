@@ -47,7 +47,7 @@ jobs:
           echo "Listing files"
           ls
           PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
-          #echo "PROJECT_ID=${project_id}" >> "$GITHUB_PROJECT_ID"
+          echo "PROJECT_ID=${project_id}" >> "$GITHUB_OUTPUT"
           echo "Pringint below ls"
           echo $PROJECT_ID
       - name: Set color
