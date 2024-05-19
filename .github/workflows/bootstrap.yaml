@@ -21,7 +21,7 @@ on:
           - plan
           - apply
           - destroy
-          - outputs
+          - output
 jobs:
   terraform:
     name: Terraform Deployment
