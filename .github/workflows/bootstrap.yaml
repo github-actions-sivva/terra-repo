@@ -12,7 +12,7 @@ on:
       #   options:
       #     - 'non-prod'
       #     - 'prod'
-        description: 'Target Environment'
+        description: 'Application Name'
       terraform_options:
         type: choice
         options:
