@@ -60,7 +60,9 @@ jobs:
           terraform init
           case "${{ github.event.inputs.terraform_options }}" in
             validate)
-            terraform validate
+              terraform validate
+            plan)
+              terraform plan -var="project_id=$PROJECT_ID"
             ;;
           esac
       - name: Terraform Output
