@@ -5,3 +5,112 @@
         env:
           SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
         run: echo "The selected color is $SELECTED_COLOR"
+
+
+
+****
+name: Bootstrap Infrastructure
+on: 
+  workflow_dispatch:
+    inputs:
+      project_name:
+        type: choice
+        options:
+          - boutique-dev
+          - boa
+      # environment:
+      #   type: choice
+      #   options:
+      #     - 'non-prod'
+      #     - 'prod'
+        description: 'Project Name In GCP'
+      terraform_options:
+        type: choice
+        options:
+          - n/a
+          - validate
+          - plan
+          - apply
+          - destroy
+          - outputs
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display Inputs
+        run: |
+          echo "Selected Environment is: ${{ github.event.inputs.environment}}"
+          echo "Selected Command is: ${{ github.event.inputs.terraform_options}}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install jq
+        run: sudo apt-get install jq
+      - name: Read Project Configuration
+        id: read_project_config
+        run: 
+          #echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
+          echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
+      - name: Print Project_ID
+        env: 
+          PROJECT_ID: ${{ steps.read_project_config.outputs.PROJECT_ID}}
+        run: |
+          echo "The Project id is: $PROJECT_ID"
+      - name: Authenticate to Google Cloud SDK
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: "${{ secrets.GCP_TF_SVC_ACCOUNT }}"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Execute Terraform Command
+        run: |
+          cd bootstrap-iac
+          terraform init
+          echo "**************** Printing Values from ENV ****************"
+          case "${{ github.event.inputs.terraform_options }}" in
+            validate)
+              terraform validate
+              ;;
+            plan)
+              #terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
+              terraform plan -var="project_id=quantum-weft-420714
+            *)
+              echo "Invalid terraform option selected."
+              exit 1
+            ;;
+          esac
+      - name: Terraform Output
+        if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'outputs' }}
+        run: |
+          cd bootstrap-iac
+          terraform output
+
+
+      # case "${{ github.event.inputs.terraform_options }}" in
+      #   validate)
+      #     terraform validate
+      #     ;;
+      #   plan)
+      #     terraform plan -var="project_id=${{ env.PROJECT_ID }}"
+      #     ;;
+      #   apply)
+      #     terraform apply -var="project_id=${{ env.PROJECT_ID }}"
+      #     ;;
+      #   destroy)
+      #     terraform destroy -var="project_id=${{ env.PROJECT_ID }}"
+      #     ;;
+      #   output)
+      #     terraform output
+      #   *)
+      #     echo "Invalid terraform option selected."
+      #     exit 1
+      #     ;;
+      # esac
+
+  # #echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
+
+  # #project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
