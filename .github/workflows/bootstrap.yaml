@@ -58,6 +58,11 @@ jobs:
         run: |
           cd bootstrap-iac
           terraform init
+          case "${{ github.event.inputs.terraform_options }}" in
+            validate)
+            terraform validate
+            ;;
+          esac
       - name: Terraform Output
         if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'outputs' }}
         run: |
