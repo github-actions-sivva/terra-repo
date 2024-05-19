@@ -58,28 +58,30 @@ jobs:
         run: |
           cd bootstrap-iac
           terraform init
-          case "${{ github.event.inputs.terraform_options }}" in
-            validate)
-              terraform validate
-              ;;
-            plan)
-              terraform plan -var="project_id=${{ env.PROJECT_ID }}"
-              ;;
-            apply)
-              terraform apply -var="project_id=${{ env.PROJECT_ID }}"
-              ;;
-            destroy)
-              terraform destroy -var="project_id=${{ env.PROJECT_ID }}"
-              ;;
-            output)
-              terraform output
-            *)
-              echo "Invalid terraform option selected."
-              exit 1
-              ;;
-          esac
       - name: Terraform Output
         if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'outputs' }}
         run: |
           cd bootstrap-iac
           terraform output
+
+
+      # case "${{ github.event.inputs.terraform_options }}" in
+      #   validate)
+      #     terraform validate
+      #     ;;
+      #   plan)
+      #     terraform plan -var="project_id=${{ env.PROJECT_ID }}"
+      #     ;;
+      #   apply)
+      #     terraform apply -var="project_id=${{ env.PROJECT_ID }}"
+      #     ;;
+      #   destroy)
+      #     terraform destroy -var="project_id=${{ env.PROJECT_ID }}"
+      #     ;;
+      #   output)
+      #     terraform output
+      #   *)
+      #     echo "Invalid terraform option selected."
+      #     exit 1
+      #     ;;
+      # esac
