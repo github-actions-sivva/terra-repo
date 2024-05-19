@@ -1,0 +1,82 @@
+name: Bootstrap Infrastructure
+on: 
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - 'non-prod'
+          - 'prod'
+        description: 'Target Environment'
+      terraform_options:
+        type: choice
+        options:
+          - validate
+          - plan
+          - apply
+          - destroy
+      project_name:
+        type: choice
+        options:
+          - project1
+          - project2
+        description: 'GCP Project Name'
+      project_id:
+        type: string
+        description: 'GCP Project ID'
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display Inputs
+        run: |
+          echo "Selected Environment is: ${{ github.event.inputs.environment}}"
+          echo "Selected Command is: ${{ github.event.inputs.terraform_options}}"
+          echo "Selected Project is: ${{ github.event.inputs.project_name}}"
+          echo "Selected Project ID is: ${{ github.event.inputs.project_id}}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Authenticate to Google Cloud SDK
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: "${{ secrets.GCP_TF_SVC_ACCOUNT }}"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10' 
+      - name: Install jq
+        run: sudo apt-get install jq
+      - name: Read Project Configuration
+        id: read_project_config
+        run: |
+          project_id=$(jq -r ".${{ github.event.inputs.project_name }}.project_id" project-config.json)
+          echo "PROJECT_ID=${project_id}" >> $GITHUB_ENV
+      - name: Execute Terraform Command
+        run: |
+          terraform init
+          case "${{ github.event.inputs.terraform_options }}" in
+            validate)
+              terraform validate
+              ;;
+            plan)
+              terraform plan -var="project_id=${{ github.event.inputs.project_id }}"
+              ;;
+            apply)
+              terraform apply --auto-approve -var="project_id=${{ github.event.inputs.project_id }}"
+              ;;
+            destroy)
+              terraform destroy --auto-approve -var="project_id=${{ github.event.inputs.project_id }}"
+              ;;
+            *)
+              echo "Invalid terraform option selected."
+              exit 1
+              ;;
+          esac
+      - name: Terraform Output
+        if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' }}
+        run: terraform output
+      - name: List of files
+        run: ls -la
