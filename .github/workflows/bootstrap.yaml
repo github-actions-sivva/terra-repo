@@ -58,6 +58,8 @@ jobs:
         run: |
           cd bootstrap-iac
           terraform init
+          echo "**************** Printing Values from ENV ****************"
+          echo $PROJECT_ID
           case "${{ github.event.inputs.terraform_options }}" in
             validate)
               terraform validate
