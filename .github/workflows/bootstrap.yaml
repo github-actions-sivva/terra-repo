@@ -66,7 +66,7 @@ jobs:
               ;;
             plan)
               #terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
-              terraform plan -var="project_id=quantum-weft-420714
+              terraform plan -var="project_id=quantum-weft-420714"
               ;;
             *)
               echo "Invalid terraform option selected."
