@@ -44,13 +44,6 @@ jobs:
         run: 
           #echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
           echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
-      - name: Set color
-        id: color-selector
-        run: echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
-      - name: Get color
-        env:
-          SELECTED_COLOR: ${{ steps.color-selector.outputs.SELECTED_COLOR }}
-        run: echo "The selected color is $SELECTED_COLOR"
       - name: Print Project_ID
         env: 
           PROJECT_ID: ${{ steps.read_project_config.outputs.PROJECT_ID}}
@@ -72,7 +65,7 @@ jobs:
             validate)
               terraform validate
             plan)
-              terraform plan -var="project_id=$PROJECT_ID"
+              terraform plan -var=${{ steps.read_project_config.outputs.PROJECT_ID}}
             ;;
           esac
       - name: Terraform Output
