@@ -65,7 +65,10 @@ jobs:
             validate)
               terraform validate
             plan)
-              terraform plan -var=${{ steps.read_project_config.outputs.PROJECT_ID}}
+              terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
+            *)
+              echo "Invalid terraform option selected."
+              exit 1
             ;;
           esac
       - name: Terraform Output
