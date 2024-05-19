@@ -5,7 +5,7 @@ on:
       project_name:
         type: choice
         options:
-          - boutique
+          - boutique-dev
           - boa
       # environment:
       #   type: choice
