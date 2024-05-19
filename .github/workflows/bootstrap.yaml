@@ -79,8 +79,6 @@ jobs:
               exit 1
               ;;
           esac
-          #if [[ "${{ github.event.inputs.terraform_options }}" == "plan" || "${{ github.event.inputs.terraform_options }}" == "apply" || "${{ github.event.inputs.terraform_options }}" == "output" ]]; then
-           # terraform output
       - name: Terraform Output
         if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'outputs' }}
         run: |
