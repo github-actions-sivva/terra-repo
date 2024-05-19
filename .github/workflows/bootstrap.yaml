@@ -13,6 +13,9 @@ on:
       #     - 'non-prod'
       #     - 'prod'
         description: 'Application Name'
+      project_id:
+        type: string
+        description: 'GCP Project ID'
       terraform_options:
         type: choice
         options:
@@ -48,13 +51,13 @@ jobs:
               terraform validate
               ;;
             plan)
-              terraform plan
+              terraform plan -var="project_id=${{ github.event.inputs.project_id }}"
               ;;
             apply)
-              terraform apply -auto-approve
+              terraform apply -auto-approve -var="project_id=${{ github.event.inputs.project_id }}"
               ;;
             destroy)
-              terraform destroy -auto-approve
+              terraform destroy -auto-approve -var="project_id=${{ github.event.inputs.project_id }}"
               ;;
             *)
               echo "Invalid terraform option selected."
