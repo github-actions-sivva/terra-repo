@@ -42,11 +42,7 @@ jobs:
       - name: Read Project Configuration
         id: read_project_config
         run: |
-          echo "Present Working Directory"
-          pwd
-          echo "Listing files"
-          ls
-          project_id=$(jq -r '.["${{ github.event.inputs.project }}"].project_id' project-config.json)
+          project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
           echo "PROJECT_ID=${project_id}" >> $GITHUB_ENV
           echo "**************** Printing all Values ***********"
           echo $GITHUB_ENV
