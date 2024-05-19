@@ -46,10 +46,8 @@ jobs:
           pwd
           echo "Listing files"
           ls
-          project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
-          echo "PROJECT_ID=${project_id}" >> "$GITHUB_OUTPUT"
-          echo "Pringint below ls"
-          echo $PROJECT_ID
+          #project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
+          echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
       - name: Set color
         id: color-selector
         run: echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
