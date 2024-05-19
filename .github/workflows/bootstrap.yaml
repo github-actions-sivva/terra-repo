@@ -41,7 +41,9 @@ jobs:
         run: sudo apt-get install jq
       - name: Read Project Configuration
         id: read_project_config
-        run: echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
+        run: 
+          #echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
+          echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
       - name: Set color
         id: color-selector
         run: echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
@@ -51,7 +53,7 @@ jobs:
         run: echo "The selected color is $SELECTED_COLOR"
       - name: Print Project_ID
         env: 
-          PROJECT_ID: ${{ steps.read_project_config.outputs.SELECTED_COLOR}}
+          PROJECT_ID: ${{ steps.read_project_config.outputs.PROJECT_ID}}
         run: |
           echo "The Project id is: $PROJECT_ID"
       - name: Authenticate to Google Cloud SDK
