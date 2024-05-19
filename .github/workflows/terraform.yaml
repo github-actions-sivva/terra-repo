@@ -18,12 +18,9 @@ on:
       project_name:
         type: choice
         options:
-          - project1
-          - project2
+          - boutique
+          - boa
         description: 'GCP Project Name'
-      project_id:
-        type: string
-        description: 'GCP Project ID'
 jobs:
   terraform:
     name: Terraform Deployment
