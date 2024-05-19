@@ -41,6 +41,8 @@ jobs:
         run: sudo apt-get install jq
       - name: Read Project Configuration
         id: read_project_config
+        env: 
+          PROJECT_ID: ${{ steps.read_project_config.PROJECT_ID }}
         run: |
           echo "Present Working Directory"
           pwd
@@ -49,7 +51,7 @@ jobs:
           project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
           echo "PROJECT_ID=${project_id}" >> $GITHUB_ENV
           echo "**************** Printing Values from Read File ****************"
-          echo "PROJECT_ID=${{ env.PROJECT_ID }}"
+          echo "The Project ID is: $PROJECT_ID"
       - name: Authenticate to Google Cloud SDK
         uses: 'google-github-actions/auth@v2'
         with:
