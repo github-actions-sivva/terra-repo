@@ -59,11 +59,16 @@ jobs:
             destroy)
               terraform destroy -auto-approve -var="project_id=${{ github.event.inputs.project_id }}"
               ;;
+            output)
+              terraform output
             *)
               echo "Invalid terraform option selected."
               exit 1
               ;;
           esac
+
+          if [[ "${{ github.event.inputs.terraform_options }}" == "plan" || "${{ github.event.inputs.terraform_options }}" == "apply" || "${{ github.event.inputs.terraform_options }}" == "output" ]]; then
+            terraform output
       - name: Terraform Output
         if: ${{ github.event.inputs.terraform_options == 'apply' || github.event.inputs.terraform_options == 'plan' || github.event.inputs.terraform_options == 'outputs' }}
         run: |
