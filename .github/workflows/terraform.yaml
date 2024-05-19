@@ -1,4 +1,4 @@
-name: Bootstrap Infrastructure
+name: Terraform Actual Infrastructure
 on: 
   workflow_dispatch:
     inputs:
