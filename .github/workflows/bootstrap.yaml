@@ -46,7 +46,7 @@ jobs:
           pwd
           echo "Listing files"
           ls
-          project_id=$(jq -r '.["${{ github.event.inputs.project }}"].project_id' project-config.json)
+          project_id=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)
           echo "PROJECT_ID=${project_id}" >> $GITHUB_ENV
       - name: Authenticate to Google Cloud SDK
         uses: 'google-github-actions/auth@v2'
