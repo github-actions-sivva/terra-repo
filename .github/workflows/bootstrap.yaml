@@ -65,16 +65,20 @@ jobs:
               terraform validate
               ;;
             plan)
-              #terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
-              terraform plan -var="project_id=quantum-weft-420714"
+              terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
               ;;
+            apply)
+              terraform apply -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
+              ;;
+            output)
+              terraform output
             *)
               echo "Invalid terraform option selected."
               exit 1
               ;;
           esac
 
-
+#terraform plan -var="project_id=quantum-weft-420714"
       # case "${{ github.event.inputs.terraform_options }}" in
       #   validate)
       #     terraform validate
