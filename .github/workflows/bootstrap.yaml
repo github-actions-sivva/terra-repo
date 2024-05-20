@@ -62,7 +62,6 @@ jobs:
         run: |
           cd bootstrap-iac
           terraform init
-          run: echo "The selected color is $SELECTED_COLOR"
           echo "Initializing Terraform with bucket: $BOOTSTRAP_BUCKET_NAME"
           echo "**************** Executing Terraform Command ****************"
           case "${{ github.event.inputs.terraform_options }}" in
