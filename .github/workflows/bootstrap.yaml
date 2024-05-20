@@ -44,6 +44,10 @@ jobs:
         run: 
           #echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
           echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
+          #echo "BOOTSTRAP_BUCKET_NAME=$(jq -r '.["${{ github.event.inputs.project_name }}"].bootstrap_bucket_name' project-config.json)" >> "$GITHUB_OUTPUT"
+      - name: Read Bootstrap Bucket Name
+        id: read_bootstrap_bucket_config
+        run: 
           echo "BOOTSTRAP_BUCKET_NAME=$(jq -r '.["${{ github.event.inputs.project_name }}"].bootstrap_bucket_name' project-config.json)" >> "$GITHUB_OUTPUT"
       - name: Print Project_ID
         env: 
@@ -58,7 +62,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       - name: Execute Terraform Command
         env:
-          BOOTSTRAP_BUCKET_NAME: ${{ steps.read_project_config.outputs.BOOTSTRAP_BUCKET_NAME}}
+          BOOTSTRAP_BUCKET_NAME: ${{ steps.read_bootstrap_bucket_config.outputs.BOOTSTRAP_BUCKET_NAME}}
         run: |
           cd bootstrap-iac
           terraform init
