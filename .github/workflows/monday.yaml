@@ -1,4 +1,4 @@
-name: Bootstrap Infrastructure
+name: Backup Bootstrap Infrastructure
 on: 
   workflow_dispatch:
     inputs:
