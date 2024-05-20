@@ -65,7 +65,7 @@ jobs:
           BOOTSTRAP_BUCKET_NAME: ${{ steps.read_bootstrap_bucket_config.outputs.BOOTSTRAP_BUCKET_NAME}}
         run: |
           cd bootstrap-iac
-          terraform init -backend-config="bucket=${{ env.BOOTSTRAP_BUCKET_NAME }}" -backend-config="prefix=terraform/state"
+          terraform init -backend-config="bucket=${{ env.BOOTSTRAP_BUCKET_NAME }}" -backend-config="prefix=terraform/states"
           echo "Initializing Terraform with bucket: $BOOTSTRAP_BUCKET_NAME"
           echo "**************** Executing Terraform Command ****************"
           case "${{ github.event.inputs.terraform_options }}" in
