@@ -1,6 +1,8 @@
 {
     "boutique-dev": {
-      "project_id": "quantum-weft-420714"
+      "project_id": "quantum-weft-420714",
+      "bootstrap_bucket_name": "quantum-weft-420714-gmek",
+      "infra_bucket_name": "stillnotdeceided"
     }
 }
   

@@ -1,4 +1,4 @@
-name: Backup Infra
+name: Bootstrap Infrastructure
 on: 
   workflow_dispatch:
     inputs:
@@ -68,7 +68,10 @@ jobs:
               terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
               ;;
             apply)
-              terraform apply -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
+              terraform apply -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}" --auto-approve
+              ;;
+            destroy)
+              terraform destroy -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}" --auto-approve
               ;;
             output)
               terraform output

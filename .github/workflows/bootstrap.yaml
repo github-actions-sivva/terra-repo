@@ -44,6 +44,7 @@ jobs:
         run: 
           #echo "SELECTED_COLOR=green" >> "$GITHUB_OUTPUT"
           echo "PROJECT_ID=$(jq -r '.["${{ github.event.inputs.project_name }}"].project_id' project-config.json)" >> "$GITHUB_OUTPUT"
+          echo "BOOTSTRAP_BUCKET_NAME=$(jq -r '.["${{ github.event.inputs.project_name }}"].bootstrap_bucket_name' project-config.json)" >> "$GITHUB_OUTPUT"
       - name: Print Project_ID
         env: 
           PROJECT_ID: ${{ steps.read_project_config.outputs.PROJECT_ID}}
@@ -59,7 +60,8 @@ jobs:
         run: |
           cd bootstrap-iac
           terraform init
-          echo "**************** Printing Values from ENV ****************"
+          echo "Initializing Terraform with bucket: ${{ steps.read_project_config.outputs.BOOTSTRAP_BUCKET_NAME}}"
+          echo "**************** Executing Terraform Command ****************"
           case "${{ github.event.inputs.terraform_options }}" in
             validate)
               terraform validate
