@@ -42,7 +42,9 @@ jobs:
       - name: Transform Project Name to Secret Key
         id: transform_project_name
         run: |
-          SECRET_KEY=$(echo "${{ github.event.inputs.project_name }}" | tr '-' '_')
+          # SECRET_KEY=$(echo "${{ github.event.inputs.project_name }}" | tr '-' '_')
+          SECRET_KEY=$(echo "${{ github.event.inputs.project_name }}" | tr '[:lower:]-' '[:upper:]_')
+          echo "SECRET_KEY=${SECRET_KEY}_GCP_TF_SVC_ACCOUNT" >> $GITHU
           echo "SECRET_KEY=${SECRET_KEY}_GCP_TF_SVC_ACCOUNT" >> $GITHUB_ENV
       - name: Read Project Configuration
         id: read_project_config
