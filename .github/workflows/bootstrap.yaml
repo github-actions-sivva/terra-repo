@@ -61,6 +61,9 @@ jobs:
           PROJECT_ID: ${{ steps.read_project_config.outputs.PROJECT_ID}}
         run: |
           echo "The Project id is: $PROJECT_ID"
+      - name: Test Secret Name
+        run: |
+          echo "${{ env.SECRET_KEY }}"
       - name: Authenticate to Google Cloud SDK
         uses: 'google-github-actions/auth@v2'
         with:
