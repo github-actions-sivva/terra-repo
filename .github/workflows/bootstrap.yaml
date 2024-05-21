@@ -73,7 +73,8 @@ jobs:
               terraform validate
               ;;
             plan)
-              terraform plan -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}"
+            # the below GOOGLE_CLOUD_PROJECT is coming from auth env variables
+              terraform plan -var="project_id=${{ env.GOOGLE_CLOUD_PROJECT }}"
               ;;
             apply)
               terraform apply -var="project_id=${{ steps.read_project_config.outputs.PROJECT_ID}}" --auto-approve
