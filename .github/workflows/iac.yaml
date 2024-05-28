@@ -1,0 +1,21 @@
+name: IAC
+on: 
+  workflow_dispatch:
+    inputs:
+      project_name:
+        type: choice
+        options:
+          - boutique-dev
+          - boa
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: GET PROJECT ID
+        id: get_project_id
+        run: |
+          PROJECT_ID = $(echo ${{ github.event.inputs.project_name }} | tr '-' '_' | tr '[:lower:]' '[:upper:] ')_PROJECT_ID
+          echo $PROJECT_ID
