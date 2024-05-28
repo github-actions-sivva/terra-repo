@@ -17,5 +17,5 @@ jobs:
       - name: GET PROJECT ID
         id: get_project_id
         run: |
-          PROJECT_ID = $(echo ${{ github.event.inputs.project_name }} | tr '-' '_' | tr '[:lower:]' '[:upper:] ')_PROJECT_ID
+          PROJECT_ID=$(echo ${{ github.event.inputs.project_name }} | tr '-' '_' | tr '[:lower:]' '[:upper:] ')_PROJECT_ID
           echo $PROJECT_ID
